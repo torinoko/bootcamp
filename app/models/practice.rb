@@ -30,7 +30,8 @@ class Practice < ApplicationRecord
   belongs_to :last_updated_user, class_name: 'User', optional: true
 
   has_and_belongs_to_many :categories, dependent: :destroy # rubocop:disable Rails/HasAndBelongsToMany
-  has_many :reference_books, dependent: :destroy
+  has_many :reference_books, inverse_of: :practice, dependent: :destroy
+  accepts_nested_attributes_for :reference_books, reject_if: :all_blank, allow_destroy: true
 
   validates :title, presence: true
   validates :description, presence: true
