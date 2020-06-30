@@ -58,8 +58,12 @@ class PracticesTest < ApplicationSystemTestCase
       fill_in 'practice[description]', with: 'テストの内容です'
       within "#reference_books" do
         click_link "追加"
-        fill_in "タイトル", with: "プロを目指す人のためのRuby入門"
-        fill_in "ASIN", with: "B077Q8BXHC"
+        fill_in "タイトル", with: "テストの参考書籍タイトル"
+        fill_in "ASIN", with: "テストの参考書籍ASIN"
+        click_link "削除"
+        click_link "追加"
+        fill_in "タイトル", with: "テストの参考書籍タイトル2"
+        fill_in "ASIN", with: "テストの参考書籍ASIN2"
       end
       fill_in 'practice[goal]', with: 'テストのゴールの内容です'
       fill_in 'practice[memo]', with: 'テストのメンター向けメモの内容です'
@@ -99,6 +103,29 @@ class PracticesTest < ApplicationSystemTestCase
     end
     assert_current_path course_practices_path(user.course)
     assert_equal "category-#{category.id}", URI.parse(current_url).fragment
+  end
+
+  test "add a reference book" do
+    login_user "komagata", "testtest"
+    practice = practices(:practice_2)
+    visit "/practices/#{practice.id}/edit"
+    within "#reference_books" do
+      click_link "追加"
+      fill_in "タイトル", with: "テストの参考書籍タイトル", match: :prefer_exact
+      fill_in "ASIN", with: "テストの参考書籍ASIN", match: :prefer_exact
+    end
+    click_button "更新する"
+  end
+
+  test "update a reference book" do
+    login_user "komagata", "testtest"
+    practice = practices(:practice_2)
+    visit "/practices/#{practice.id}/edit"
+    within "#reference_books" do
+      fill_in "タイトル", with: "テストの参考書籍タイトル"
+      fill_in "ASIN", with: "テストの参考書籍ASIN"
+    end
+    click_button "更新する"
   end
 
   test 'show setting for completed percentage' do
