@@ -32,7 +32,7 @@ Rails.application.routes.draw do
     resources :checks, only: %i(index create destroy)
     resources :users, only: %i(index show)
     resources :reservations, only: %i(index create destroy)
-    resources :practices, only: %i(show update) do
+    resources :practices, only: %i(index show update) do
       resource :learning, only: %i(show update), controller: "practices/learning"
     end
     namespace "reports" do
@@ -42,7 +42,7 @@ Rails.application.routes.draw do
     resources :memos, only: %i(create update destroy)
     resources :tags, only: %i(index)
     resources :pages, only: %i(update)
-    resources :questions, only: %i(update)
+    resources :questions, only: %i(index show update destroy)
     resources :followings, only: %i(create destroy)
   end
 
