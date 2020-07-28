@@ -20,10 +20,17 @@ class PracticesController < ApplicationController
     @practice = Practice.new(practice_params)
     if @practice.save
       SlackNotification.notify "<#{url_for(current_user)}|#{current_user.login_name}>が<#{url_for(@practice)}|#{@practice.title}>を作成しました。",
-                               username: "#{current_user.login_name}@bootcamp.fjord.jp",
-                               icon_url: current_user.avatar_url
-      Amazon.fetch_api(@practice)
-      redirect_to @practice, notice: 'プラクティスを作成しました。'
+      username: "#{current_user.login_name}@bootcamp.fjord.jp",
+      icon_url: current_user.avatar_url
+
+      @practice.reference_books.each do |book|
+        amazon_api = AmazonAPI.new(book.asin)
+        book.image_url = amazon_api.image_url
+        book.page_url = amazon_api.page_url
+        book.save
+      end
+
+      redirect_to @practice, notice: "プラクティスを作成しました。"
     else
       render :new
     end
@@ -38,7 +45,14 @@ class PracticesController < ApplicationController
       SlackNotification.notify "#{text}\n```#{diff}```",
         username: "#{current_user.login_name}@bootcamp.fjord.jp",
         icon_url: current_user.avatar_url
-      Amazon.fetch_api(@practice)
+
+      @practice.reference_books.each do |book|
+          amazon_api = AmazonAPI.new(book.asin)
+          book.image_url = amazon_api.image_url
+          book.page_url = amazon_api.page_url
+          book.save
+      end
+
       redirect_to @practice, notice: "プラクティスを更新しました。"
     else
       render :edit
