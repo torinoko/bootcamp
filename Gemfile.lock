@@ -460,7 +460,6 @@ GEM
     vacuum (3.4.0)
       aws-sigv4 (~> 1.0)
       http (~> 4.0)
-    vcr (6.0.0)
     web-console (4.0.2)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -552,7 +551,6 @@ DEPENDENCIES
   sucker_punch (~> 2.0)
   traceroute
   vacuum
-  vcr
   web-console (>= 3.3.0)
   webdrivers
   webmock
