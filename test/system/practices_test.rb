@@ -3,12 +3,19 @@
 require 'application_system_test_case'
 
 class PracticesTest < ApplicationSystemTestCase
-  WebMock.allow_net_connect!
+  setup do
+    json = File.read("#{Rails.root}/test/fixtures/files/mock_bodies/amazon.json")
+    stub_request(:post, "https://webservices.amazon.co.jp/paapi5/getitems")
+      .to_return(
+        status: 200,
+        body: json,
+      )
+  end
 
-  test 'show practice' do
-    login_user 'hatsuno', 'testtest'
-    visit "/practices/#{practices(:practice1).id}"
-    assert_equal 'OS X Mountain Lionをクリーンインストールする | FJORD BOOT CAMP（フィヨルドブートキャンプ）', title
+  test "show practice" do
+    login_user "hatsuno", "testtest"
+    visit "/practices/#{practices(:practice_1).id}"
+    assert_equal "OS X Mountain Lionをクリーンインストールする | FJORD BOOT CAMP（フィヨルドブートキャンプ）", title
   end
 
   test 'show link to all practices with same category' do
@@ -108,30 +115,26 @@ class PracticesTest < ApplicationSystemTestCase
   end
 
   test "add a reference book" do
-    VCR.use_cassette("response") do
-      login_user "komagata", "testtest"
-      practice = practices(:practice_2)
-      visit "/practices/#{practice.id}/edit"
-      within "#reference_books" do
-        click_link "追加"
-        fill_in "タイトル", with: "プロを目指す人のRuby入門", match: :prefer_exact
-        fill_in "ASIN", with: "B077Q8BXHC", match: :prefer_exact
-      end
-      click_button "更新する"
+    login_user "komagata", "testtest"
+    practice = practices(:practice_2)
+    visit "/practices/#{practice.id}/edit"
+    within "#reference_books" do
+      click_link "追加"
+      fill_in "タイトル", with: "プロを目指す人のRuby入門", match: :prefer_exact
+      fill_in "ASIN", with: "B077Q8BXHC", match: :prefer_exact
     end
+    click_button "更新する"
   end
 
   test "update a reference book" do
-    VCR.use_cassette("response") do
-      login_user "komagata", "testtest"
-      practice = practices(:practice_2)
-      visit "/practices/#{practice.id}/edit"
-      within "#reference_books" do
-        fill_in "タイトル", with: "プロを目指す人のRuby入門"
-        fill_in "ASIN", with: "B077Q8BXHC"
-      end
-      click_button "更新する"
+    login_user "komagata", "testtest"
+    practice = practices(:practice_2)
+    visit "/practices/#{practice.id}/edit"
+    within "#reference_books" do
+      fill_in "タイトル", with: "プロを目指す人のRuby入門"
+      fill_in "ASIN", with: "B077Q8BXHC"
     end
+    click_button "更新する"
   end
 
   test 'show setting for completed percentage' do
