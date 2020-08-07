@@ -3,15 +3,6 @@
 require 'application_system_test_case'
 
 class PracticesTest < ApplicationSystemTestCase
-  setup do
-    json = File.read("#{Rails.root}/test/fixtures/files/mock_bodies/amazon.json")
-    stub_request(:post, "https://webservices.amazon.co.jp/paapi5/getitems")
-      .to_return(
-        status: 200,
-        body: json,
-      )
-  end
-
   test "show practice" do
     login_user "hatsuno", "testtest"
     visit "/practices/#{practices(:practice_1).id}"
@@ -115,6 +106,7 @@ class PracticesTest < ApplicationSystemTestCase
   end
 
   test "add a reference book" do
+    stub_amazon!
     login_user "komagata", "testtest"
     practice = practices(:practice_2)
     visit "/practices/#{practice.id}/edit"
@@ -127,6 +119,7 @@ class PracticesTest < ApplicationSystemTestCase
   end
 
   test "update a reference book" do
+    stub_amazon!
     login_user "komagata", "testtest"
     practice = practices(:practice_2)
     visit "/practices/#{practice.id}/edit"
