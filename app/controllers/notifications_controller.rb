@@ -14,6 +14,8 @@ class NotificationsController < ApplicationController
   def show
     path = @notification.read_attribute :path
     @notifications = current_user.notifications.where(path: path)
+    p @notifications
+    puts "notificationController#show\n" * 10
     @notifications.update_all(read: true)
     redirect_to path
   end
