@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_05_061115) do
+ActiveRecord::Schema.define(version: 2021_01_13_075714) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -431,7 +431,7 @@ ActiveRecord::Schema.define(version: 2020_12_05_061115) do
     t.text "opinion"
     t.bigint "retire_reasons", default: 0, null: false
     t.string "unsubscribe_email_token"
-    t.text "memo"
+    t.text "mentor_memo"
     t.index ["course_id"], name: "index_users_on_course_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
