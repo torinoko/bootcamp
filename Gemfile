@@ -52,7 +52,6 @@ gem 'sorcery-jwt'
 gem 'stripe', '~> 4.5.0'
 gem 'stripe-i18n'
 gem 'sucker_punch', '~> 2.0'
-gem "vacuum"
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
