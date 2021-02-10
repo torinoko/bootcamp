@@ -1,14 +1,40 @@
 header.header
   .container.has-no-right-padding
     .header__container
-      = link_to root_path, class: 'header__title' do
-        = image_tag('pjord-face.svg', alt: 'プログラミングスクール', class: 'header__title-image')
-        - if current_user.graduated_on?
-          .user-part.is-header(class='is-graduate') 卒業生
-        - if current_user.adviser
-          .user-part.is-header(class='is-adviser') アドバイザー
+      .header__start
+        = link_to root_path, class: 'header__title' do
+          = image_tag('pjord-face.svg', alt: 'プログラミングスクール', class: 'header__title-image')
+          - if current_user.graduated_on?
+            .user-part.is-header(class='is-graduate') 卒業生
+          - if current_user.adviser
+            .user-part.is-header(class='is-adviser') アドバイザー
+          - if current_user.admin?
+            .user-part.is-header.is-only-mentor-flex(class='is-admin') 管理者
         - if current_user.admin?
-          .user-part.is-header(class='is-admin') 管理者
-      = render 'header_links'
+          .switch.is-hidden-sm-down
+            label.switch__label(for='modal-mentor-mode')
+              span.switch__label-text
+                | メンターモード
+              .a-help
+                i.fas.fa-question
+            label.a-on-off-checkbox.is-sm(for='display-only-mentor')
+              input.js-mentor-mode__trigger#display-only-mentor(type = 'checkbox' checked = 'checked')
+              span#checkbox-mentor-mode
 
-      #js-notifications-mobile
+      .header__end
+        = render 'header_links'
+
+        #js-notifications-mobile
+
+= render '/shared/modal', id: 'modal-mentor-mode', title: 'メンターモードとは？'
+  .modal__description.is-md
+    .a-short-text
+      p
+        | こちらのページで他の受講者が今どのプラクティスを学習しているかが確認できます。
+      p
+        | 他の受講者の進捗が目に入ると焦ってしまう、精神的に追い詰められる、と感じた場合、「OFF」にすることで、他の受講者の進捗が非表示になります。逆にみんなの進捗が見れることでモチベーションアップにつながる、という方は「ON」にしてください。
+      hr
+      p
+        | フィヨルドブートキャンプは、前提の知識や経験は人によってバラバラ、どこまで掘り下げて学習をするかも人によってバラバラ、学習に使える時間もバラバラなので、学校の授業や資格取得の勉強とは全く別物です。早ければいいというものではないです。
+      p
+        | 同じくらいのプラクティスをやってる人の日報をフォローしたり、お互い日報にコメントを付け合ったり、チャットやミートアップで話してみたりするのオススメです。
